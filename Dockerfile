@@ -1,6 +1,6 @@
 FROM amigadev/docker-base:latest
 
-ENV CROSS_PFX aarch64-linux-gnu
+ENV CROSS_PFX powerpc64-linux-gnu
 ENV OS_NAME Linux
 
 # Temporary fix
@@ -11,8 +11,7 @@ ENV OS_NAME Linux
 MAINTAINER Marlon Beijer "marlon@amigadev.com"
 RUN apt update \
 	&& apt install -y libtool automake autoconf build-essential ninja-build \
-        && apt install -y gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu \
-        && cp /usr/aarch64-linux-gnu/include/gnu/stubs-lp64.h /usr/aarch64-linux-gnu/include/gnu/stubs-lp64_be.h \
+        && apt install -y gcc-14-powerpc64-linux-gnu g++-14-powerpc64-linux-gnu \
 	&& apt autoremove -y
 
 RUN echo "root:root" | chpasswd
@@ -31,15 +30,15 @@ COPY imagefiles/entrypoint.sh /entry/
 ENV AS=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-as \
 	LD=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-ld \
 	AR=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-ar \
-	CC=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-gcc-10 \
-	CXX=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-g++-10 \
+	CC=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-gcc-14 \
+	CXX=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-g++-14 \
 	RANLIB=${CROSS_BIN_PATH}/bin/${CROSS_PFX}-ranlib
 
 RUN ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-as /usr/bin/as && \
 	ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-ar /usr/bin/ar && \
 	ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-ld /usr/bin/ld && \
-	ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-gcc-10 /usr/bin/gcc && \
-	ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-g++-10 /usr/bin/g++ && \
+	ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-gcc-14 /usr/bin/gcc && \
+	ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-g++-14 /usr/bin/g++ && \
 	ln -sf ${CROSS_BIN_PATH}/bin/${CROSS_PFX}-ranlib /usr/bin/ranlib
 
 #COPY dependencies/toolchains/${CROSS_PFX}.cmake ${CROSS_ROOT}/lib/
